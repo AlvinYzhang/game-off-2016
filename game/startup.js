@@ -63,12 +63,12 @@ define([
     var time = new Date();
     if ((time - lastTime) > deltaTime) {
       if (player.isJumping) {
-        var targetX = normalize(mousePos.x, -1, 1, -70, 10);
+        var targetX = normalize(mousePos.x, -1, 1, -270, 200);
+        targetX = Math.max(Math.min(targetX, 20), -80);
         TweenMax.to(player.mesh.position, 0.2, {x: targetX});
         player.checkOrientation();
         player.checkJump();
         if (player.moveRest) {
-          console.log('elo!');
           platforms.platforms.forEach(function(pl) {
             pl.position.y -= player.jumpSpeed;
           });
