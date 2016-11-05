@@ -124,15 +124,26 @@ var Player = function() {
   leg2a.position.x -= 15;
 
   // belly
-  var geomBelly = new THREE.CubeGeometry(30, 30, 30);
+  var geomBelly = new THREE.CubeGeometry(30, 20, 30);
   var belly = new THREE.Mesh(geomBelly, matLeg);
   belly.castShadow = true;
   belly.receiveShadow = true;
   this.mesh.add(belly);
-  belly.position.y += 30;
+  belly.position.y += 25;
   belly.position.x -= 5;
   belly.position.z += 10;
   // belly.position.x -= 20;
+
+  // neck
+  var geomNeck = new THREE.CubeGeometry(20, 10, 10);
+  var matNeck = new THREE.MeshPhongMaterial({color:Colors.skin, shading:THREE.FlatShading});
+  var neck = new THREE.Mesh(geomNeck, matNeck);
+  neck.castShadow = true;
+  neck.receiveShadow = true;
+  this.mesh.add(neck);
+  neck.position.y += 40;
+  neck.position.x -= 5;
+  neck.position.z += 10;
 };
 
 
