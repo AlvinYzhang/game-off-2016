@@ -10,6 +10,29 @@ define([
   // var player, staringPlatform;
   var staringPlatform;
   var scene, lights;
+  var mousePos = {
+    x: 0,
+    y: 0
+  };
+
+  function handleMouseMove(event) {
+    console.log(scene);
+    var tx = -1 + (event.clientX / scene.WIDTH)*2;
+    var ty = 1 - (event.clientY / scene.HEIGHT)*2;
+    mousePos = {x:tx, y:ty};
+    console.log(mousePos);
+  }
+
+  function normalize(v,vmin,vmax,tmin, tmax){
+
+  	var nv = Math.max(Math.min(v,vmax), vmin);
+  	var dv = vmax-vmin;
+  	var pc = (nv-vmin)/dv;
+  	var dt = tmax-tmin;
+  	var tv = tmin + (pc*dt);
+  	return tv;
+
+  }
 
   var startGame = function() {
     setTimeout(function() {
@@ -26,6 +49,8 @@ define([
     var time = new Date();
     if ((time - lastTime) > deltaTime) {
       if (player.isJumping) {
+        var targetX = normalize(mousePos.x, -1, 1, -70, 10);
+        player.mesh.position.x = targetX;
         player.checkJump();
       }
 
@@ -65,7 +90,8 @@ define([
     window.player = playerClass.createPlayer();
     lights.createLights();
     staringPlatform = platforms.addStartingPlatform();
-    console.log(platforms);
+
+    document.addEventListener('mousemove', handleMouseMove, false);
     platforms.createAll();
     loop();
     startGame();

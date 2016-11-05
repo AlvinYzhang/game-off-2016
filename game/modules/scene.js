@@ -42,7 +42,9 @@ define(function() {
     return {
       scene: scene,
       renderer: renderer,
-      camera: camera
+      camera: camera,
+      WIDTH: WIDTH,
+      HEIGHT: HEIGHT
     };
   }
 
@@ -56,6 +58,7 @@ define(function() {
 
   return {
     createScene: createScene,
-    scene: scene
+    scene: scene,
+    camera: camera
   };
 });

@@ -159,12 +159,13 @@ function(scene, Colors) {
     this.isFalling = false;
     this.jumpSpeed = 0;
     this.fallSpeed = 0;
+    this.maxJumpSpeed = 8;
 
     this.jump = function() {
       if (!this.isJumping && !this.isFalling) {
         this.fallSpeed = 0;
         this.isJumping = true;
-        this.jumpSpeed = 8;
+        this.jumpSpeed = this.maxJumpSpeed;
       }
     };
 
