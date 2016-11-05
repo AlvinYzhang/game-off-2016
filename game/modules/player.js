@@ -197,7 +197,7 @@ function(scene, Colors) {
     this.moveRight = function() {
       if (this.mesh.position.x < 10) {
         // this.mesh.position.x += 5;
-        TweenMax.to(this.mesh.position, 0.2, { x: this.mesh.position.x+5 });
+        TweenMax.to(this.mesh.position, 0.2, { x: this.mesh.position.x+10 });
       }
       if (this.mesh.position.x > -25 && this.mesh.rotation.y > 0) {
         TweenMax.to(this.mesh.rotation, 0.6, { y: -0.9 });
@@ -207,7 +207,7 @@ function(scene, Colors) {
     this.moveLeft = function() {
       if (this.mesh.position.x > -70) {
         // this.mesh.position.x -= 5;
-        TweenMax.to(this.mesh.position, 0.2, { x: this.mesh.position.x-5 });
+        TweenMax.to(this.mesh.position, 0.2, { x: this.mesh.position.x-10 });
       }
       if (this.mesh.position.x < -25 && this.mesh.rotation.y < 0) {
         TweenMax.to(this.mesh.rotation, 0.6, { y: 0.9 });

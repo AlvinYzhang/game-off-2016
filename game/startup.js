@@ -7,7 +7,8 @@ define([
 ], function(
   sceneClass, lights, playerClass, platforms, Colors
 ) {
-  var player, staringPlatform;
+  // var player, staringPlatform;
+  var staringPlatform;
   var scene, lights;
 
   var startGame = function() {
@@ -34,18 +35,30 @@ define([
       lastTime = time;
     }
     // player.mesh.rotation.y -= 0.05;
+    var caster = new THREE.Raycaster();
+    var ray = new THREE.Vector3(0, -1, 0);
+    caster.set(player.mesh.position, ray);
+    var collision = caster.intersectObjects([platform]);
+
     scene.renderer.render(scene.scene, scene.camera);
+    if (collision.length && collision[0].distance < 3.5) {
+      player.mesh.position.y = platform.position.y + 1.5;
+      player.fallStop();
+    }
+
     requestAnimationFrame(loop);
   }
 
   function init(event) {
     scene = sceneClass.createScene();
     sceneClass.scene = scene.scene;
-    player = playerClass.createPlayer();
+    window.player = playerClass.createPlayer();
     lights.createLights();
+    staringPlatform = platforms.addStartingPlatform();
+    console.log(platforms);
+    platforms.createPlatform();
     loop();
     startGame();
-    staringPlatform = platforms.addPlatform();
   }
 
   document.onkeydown = function(e) {
