@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/michalbe/game-off-2016/issues"
   },
-  "homepage": "https://github.com/michalbe/game-off-2016#readme"
+  "homepage": "https://github.com/michalbe/game-off-2016#readme",
+  "dependencies": {
+    "requirejs": "^2.3.2"
+  }
 }
