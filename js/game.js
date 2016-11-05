@@ -244,19 +244,19 @@ var Player = function() {
 
 
 // 3D Models
-var airplane;
+var player;
 
-function createPlane() {
-  airplane = new Player();
-  airplane.mesh.scale.set(.5,.5,.5);
-  airplane.mesh.position.y = 50;
-  airplane.mesh.rotation.y -= 2.19;
-  // airplane.mesh.rotation.y -= 0.19;
-  scene.add(airplane.mesh);
+function createPlayer() {
+  player = new Player();
+  player.mesh.scale.set(.5,.5,.5);
+  player.mesh.position.y = 50;
+  player.mesh.rotation.y -= 0.9;
+  // player.mesh.rotation.y -= 0.19;
+  scene.add(player.mesh);
 }
 
 function loop(){
-  airplane.mesh.rotation.y -= 0.05;
+  // player.mesh.rotation.y -= 0.05;
   renderer.render(scene, camera);
   requestAnimationFrame(loop);
 }
@@ -274,7 +274,7 @@ function init(event){
   document.addEventListener('mousemove', handleMouseMove, false);
   createScene();
   createLights();
-  createPlane();
+  createPlayer();
   loop();
 }
 
