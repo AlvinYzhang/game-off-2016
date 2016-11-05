@@ -55,6 +55,7 @@ define(function() {
   }
 
   return {
-    createScene: createScene
+    createScene: createScene,
+    scene: scene
   };
 });

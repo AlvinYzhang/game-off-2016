@@ -22,11 +22,9 @@ function(scene) {
     shadowLight.shadow.mapSize.width = 2048;
     shadowLight.shadow.mapSize.height = 2048;
 
-    return {
-      hemisphereLight: hemisphereLight,
-      shadowLight: shadowLight,
-      ambientLight: ambientLight
-    };
+    scene.scene.add(hemisphereLight);
+    scene.scene.add(shadowLight);
+    scene.scene.add(ambientLight);
   }
 
   return {

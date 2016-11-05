@@ -224,6 +224,8 @@ function(scene, Colors) {
     // player.mesh.rotation.y -= 0.4;
     player.mesh.position.z = 60;
 
+    scene.scene.add(player.mesh);
+
     return player;
   }
   return {

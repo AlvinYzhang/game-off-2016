@@ -2,16 +2,17 @@ define([
   './modules/scene',
   './modules/lights',
   './modules/player',
+  './modules/platforms',
   './modules/colors'
 ], function(
-  sceneClass, lightsClass, playerClass, Colors
+  sceneClass, lights, playerClass, platforms, Colors
 ) {
-  var player, platform;
+  var player, staringPlatform;
   var scene, lights;
 
   var startGame = function() {
     setTimeout(function() {
-      // TweenMax.to(platform.position, 2, {ease: "Strong.easeOut", y: 38, x: -30});
+      TweenMax.to(staringPlatform.position, 2, {ease: "Strong.easeOut", y: 38, x: -30});
       TweenMax.to(player.mesh.scale, 2, {ease: "Strong.easeOut", z: 0.125, y: 0.125, x: 0.125});
       TweenMax.to(player.mesh.position, 2, {ease: "Strong.easeOut", z: 0, y: 48.5, x: -50});
       TweenMax.to(player.mesh.rotation, 2, {ease: "Strong.easeOut", y: 0.9, onComplete: player.jump.bind(player)});
@@ -39,22 +40,12 @@ define([
 
   function init(event) {
     scene = sceneClass.createScene();
-    lights = lightsClass.createLights();
+    sceneClass.scene = scene.scene;
     player = playerClass.createPlayer();
+    lights.createLights();
     loop();
     startGame();
-
-    var platformGeo = new THREE.CubeGeometry(100, 20, 20);
-    var matHair = new THREE.MeshPhongMaterial({color: Colors.hair, shading:THREE.FlatShading});
-    var platform = new THREE.Mesh(platformGeo, matHair);
-    platform.castShadow = true;
-    platform.receiveShadow = true;
-    scene.scene.add(platform);
-
-    scene.scene.add(player.mesh);
-    scene.scene.add(lights.hemisphereLight)
-    scene.scene.add(lights.shadowLight);
-    scene.scene.add(lights.ambientLight);
+    staringPlatform = platforms.addPlatform();
   }
 
   document.onkeydown = function(e) {
