@@ -7,8 +7,8 @@ define([
 ], function(
   sceneClass, lights, playerClass, platforms, Colors
 ) {
-  // var player, staringPlatform;
-  var staringPlatform;
+  // var player, startingPlatform;
+  var startingPlatform;
   var scene, lights;
   var mousePos = {
     x: 0,
@@ -34,7 +34,7 @@ define([
 
   var startGame = function() {
     setTimeout(function() {
-      TweenMax.to(staringPlatform.position, 2, {ease: "Strong.easeOut", y: 38, x: -30});
+      TweenMax.to(startingPlatform.position, 2, {ease: "Strong.easeOut", y: 38, x: -30});
       TweenMax.to(player.mesh.scale, 2, {ease: "Strong.easeOut", z: 0.125, y: 0.125, x: 0.125});
       TweenMax.to(player.mesh.position, 2, {ease: "Strong.easeOut", z: 0, y: 48.5, x: -50});
       TweenMax.to(player.mesh.rotation, 2, {ease: "Strong.easeOut", y: 0.9, onComplete: player.jump.bind(player)});
@@ -54,6 +54,14 @@ define([
         TweenMax.to(player.mesh.position, 0.2, {x: targetX});
         player.checkOrientation();
         player.checkJump();
+        if (player.moveRest) {
+          console.log('elo!');
+          platforms.platforms.forEach(function(pl) {
+            pl.position.y -= player.jumpSpeed;
+          });
+
+          startingPlatform.position.y -= player.jumpSpeed;
+        }
       }
 
       if (player.isFalling) {
@@ -70,11 +78,10 @@ define([
       var collision = caster.intersectObjects(platforms.platforms);
 
       if (collision.length) {
-        console.log(collision);
         // return;
       }
       for (var i = 0; i < collision.length; i++) {
-        if (collision[i].distance < 3.3) {
+        if (collision[i].distance < player.fallSpeed+1) {
           player.fallStop();
           break;
         }
@@ -91,7 +98,7 @@ define([
     sceneClass.scene = scene.scene;
     window.player = playerClass.createPlayer();
     lights.createLights();
-    staringPlatform = platforms.addStartingPlatform();
+    startingPlatform = platforms.addStartingPlatform();
 
     document.addEventListener('mousemove', handleMouseMove, false);
     platforms.createAll();

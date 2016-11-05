@@ -170,7 +170,13 @@ function(scene, Colors) {
     };
 
     this.checkJump = function() {
-      this.mesh.position.y += this.jumpSpeed;
+      if (this.mesh.position.y > 100) {
+        console.log('movedonw');
+        this.moveRest = true;
+      } else {
+        this.moveRest = false;
+        this.mesh.position.y += this.jumpSpeed;
+      }
       this.jumpSpeed--;
       if (this.jumpSpeed === 0) {
         this.isJumping = false;
