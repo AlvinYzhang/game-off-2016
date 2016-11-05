@@ -29,15 +29,14 @@ function(Colors, scene, font) {
 
   var numberOfPlatforms = 30;
   var platforms = [];
-  var distance = 21;
+  var distance = 20;
   var startingY = 70;
   var lengthChars = 10;
 
   var createPlatform = function(y, first) {
     var platformText = text.substr(0, lengthChars);
     text = text.substr(lengthChars);
-
-
+    platformText = platformText.replace(/\@/gi, 'E');
     var platformGeo2 = new THREE.CubeGeometry(60, 5, 30);
     var platformGeo = new THREE.TextGeometry(platformText, {
       font: font,
@@ -61,15 +60,29 @@ function(Colors, scene, font) {
 
     var matSuper = new THREE.MeshPhongMaterial({color: Colors.green, shading:THREE.FlatShading});
     var matHair = new THREE.MeshPhongMaterial({color: Colors.hair, shading:THREE.FlatShading});
+    var matMoving = new THREE.MeshPhongMaterial({color: Colors.blue, shading:THREE.FlatShading});
 
+    window.platform = new THREE.Mesh(finalPlGeo, matHair);
+    platform.action = function() {};
     var useSuper = false;
-    var superKeyword = ['function', 'timeout', 'interval', 'for', 'var', 'new', 'window', 'return'];
+    var superKeyword = ['function', 'for', 'new', 'window', 'return'];
     superKeyword.forEach(function(keyword) {
       if (platformText.indexOf(keyword) > -1) {
         useSuper = true;
+        platform.material = matSuper;
       }
     });
-    window.platform = new THREE.Mesh(finalPlGeo, useSuper ? matSuper : matHair);
+
+    var movingKeywords = ['var', 'new', 'interval', 'timeout', 'array', 'call'];
+    movingKeywords.forEach(function(keyword) {
+      if (platformText.indexOf(keyword) > -1) {
+        platform.action = function() {
+          this.position.x = 70;
+          this.tween = TweenMax.to(this.position, Math.ceil(Math.random()*5), { x: -100, repeat: -1, yoyo: true});
+        }.bind(platform);
+        platform.material = matMoving;
+      }
+    });
     platform.super = useSuper;
     platform.castShadow = true;
     platform.receiveShadow = true;
@@ -93,6 +106,8 @@ function(Colors, scene, font) {
     // scene.scene.add(platform.bbox);
     platforms.push(platform);
     scene.scene.add(platform);
+
+    return platform;
   }
 
   var createAll = function() {

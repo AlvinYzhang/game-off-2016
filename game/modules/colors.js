@@ -6,7 +6,8 @@ define(function() {
       skin: 0xFFD5A9,
       hair: 0xFFD300,
       black: 0x4C4C4C,
-      green: 0x1ec503
+      green: 0x1ec503,
+      blue: 0x00a4ff
   };
 
 });

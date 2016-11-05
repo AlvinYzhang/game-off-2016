@@ -159,7 +159,7 @@ function(scene, Colors) {
     this.isFalling = false;
     this.jumpSpeed = 0;
     this.fallSpeed = 0;
-    this.maxJumpSpeed = 8;
+    this.maxJumpSpeed = 9;
 
     this.jump = function() {
       if (!this.isJumping && !this.isFalling) {

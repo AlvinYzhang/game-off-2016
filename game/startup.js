@@ -54,6 +54,9 @@ define([
       platforms.platforms.forEach(function(pl) {
         TweenMax.to(pl.position, 2, {ease: "Strong.easeOut", y: pl.tempY});
       });
+      platforms.platforms.forEach(function(pl) {
+        pl.action();
+      });
     }, 2000);
   }
 
@@ -82,11 +85,7 @@ define([
       }
       lastTime = time;
     }
-    // player.mesh.rotation.y -= 0.05;
 
-    // platforms.platforms.forEach(function(pl) {
-    //   pl.bbox.update();
-    // });
     if (player.isFalling) {
       var caster = new THREE.Raycaster();
       var ray = new THREE.Vector3(0, -1, 0);
@@ -98,19 +97,19 @@ define([
           if (collision[i].distance < player.fallSpeed+1) {
             player.fallStop();
             if (collision[i].object.super) {
-              player.jumpSpeed = 20;
+              player.jumpSpeed = 15;
             }
             break;
           }
         }
       }
 
-      scene.camera.updateMatrix(); // make sure camera's local matrix is updated
-      scene.camera.updateMatrixWorld(); // make sure camera's world matrix is updated
+      scene.camera.updateMatrix();
+      scene.camera.updateMatrixWorld();
       scene.camera.matrixWorldInverse.getInverse(scene.camera.matrixWorld);
 
-      player.head.updateMatrix(); // make sure plane's local matrix is updated
-      player.head.updateMatrixWorld(); // make sure plane's world matrix is updated
+      player.head.updateMatrix();
+      player.head.updateMatrixWorld();
 
       var frustum = new THREE.Frustum();
       frustum.setFromMatrix( new THREE.Matrix4().multiplyMatrices(scene.camera.projectionMatrix, scene.camera.matrixWorldInverse));
@@ -120,7 +119,8 @@ define([
 
       if (!frustum.intersectsObject(platforms.platforms[0])) {
         platforms.platforms.shift();
-        platforms.createPlatform(platforms.platforms[platforms.platforms.length-1].position.y + platforms.distance);
+        var newPlatform = platforms.createPlatform(platforms.platforms[platforms.platforms.length-1].position.y + platforms.distance);
+        newPlatform.action();
       }
         // player.mesh.position.y = platform.position.y + 1.5;
     }
