@@ -98,19 +98,21 @@ var Player = function() {
 	leg1.castShadow = true;
   leg1.receiveShadow = true;
   this.mesh.add(leg1);
+  leg1.position.x += 5;
 
 	var geomLegUp = new THREE.CubeGeometry(10, 10, 20);
   var leg1a = new THREE.Mesh(geomLegUp, matLeg);
 	leg1a.castShadow = true;
   leg1a.receiveShadow = true;
   this.mesh.add(leg1a);
+  leg1a.position.x += 5;
   leg1a.position.y += 10;
   leg1a.position.z += 5;
 
   var leg2 = new THREE.Mesh(geomLeg, matLeg);
   leg2.castShadow = true;
   leg2.receiveShadow = true;
-  leg2.position.x -= 20;
+  leg2.position.x -= 15;
   this.mesh.add(leg2);
 
   var leg2a = new THREE.Mesh(geomLegUp, matLeg);
@@ -119,20 +121,29 @@ var Player = function() {
   this.mesh.add(leg2a);
   leg2a.position.y += 10;
   leg2a.position.z += 5;
-  leg2a.position.x -= 20;
+  leg2a.position.x -= 15;
 
   // belly
+  var geomBelly = new THREE.CubeGeometry(30, 30, 30);
+  var belly = new THREE.Mesh(geomBelly, matLeg);
+  belly.castShadow = true;
+  belly.receiveShadow = true;
+  this.mesh.add(belly);
+  belly.position.y += 30;
+  belly.position.x -= 5;
+  belly.position.z += 10;
+  // belly.position.x -= 20;
 };
 
 
 // 3D Models
 var airplane;
 
-function createPlane(){
+function createPlane() {
   airplane = new Player();
   airplane.mesh.scale.set(.5,.5,.5);
   airplane.mesh.position.y = 50;
-  airplane.mesh.rotation.y += 0.2;
+  airplane.mesh.rotation.y -= 0.9;
   scene.add(airplane.mesh);
 }
 
