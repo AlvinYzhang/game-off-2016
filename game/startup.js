@@ -8,6 +8,7 @@ define([
   sceneClass, lights, playerClass, platforms, Colors
 ) {
   // var player, startingPlatform;
+
   var startingPlatform;
   var scene, lights;
   var mousePos = {
@@ -31,6 +32,18 @@ define([
   	return tv;
 
   }
+
+  var gameOver = function() {
+    player.isJumping = player.isFalling = false;
+    player.fallSpeed = player.jumpSpeed = 0;
+    TweenMax.to(player.mesh.scale, 2, {ease: "Strong.easeOut", z: 0.5, y: 0.5, x: 0.5});
+    TweenMax.to(player.mesh.position, 2, {ease: "Strong.easeOut", z: 60, y: 65, x: -30});
+    TweenMax.to(player.mesh.rotation, 2, {ease: "Strong.easeOut", y: 0});
+    platforms.platforms.forEach(function(pl) {
+      TweenMax.to(pl.position, 2, {ease: "Strong.easeOut", y: -300});
+    });
+    TweenMax.to(startingPlatform.position, 2, {ease: "Strong.easeOut", y: -300});
+  };
 
   var startGame = function() {
     setTimeout(function() {
@@ -78,13 +91,25 @@ define([
       var collision = caster.intersectObjects(platforms.platforms.concat([startingPlatform]));
 
       if (collision.length) {
-        // return;
-      }
-      for (var i = 0; i < collision.length; i++) {
-        if (collision[i].distance < player.fallSpeed+1) {
-          player.fallStop();
-          break;
+        for (var i = 0; i < collision.length; i++) {
+          if (collision[i].distance < player.fallSpeed+1) {
+            player.fallStop();
+            break;
+          }
         }
+      }
+
+      scene.camera.updateMatrix(); // make sure camera's local matrix is updated
+      scene.camera.updateMatrixWorld(); // make sure camera's world matrix is updated
+      scene.camera.matrixWorldInverse.getInverse(scene.camera.matrixWorld);
+
+      player.head.updateMatrix(); // make sure plane's local matrix is updated
+      player.head.updateMatrixWorld(); // make sure plane's world matrix is updated
+
+      var frustum = new THREE.Frustum();
+      frustum.setFromMatrix( new THREE.Matrix4().multiply(scene.camera.projectionMatrix, scene.camera.matrixWorldInverse));
+      if (!frustum.intersectsObject(player.head)) {
+        gameOver();
       }
         // player.mesh.position.y = platform.position.y + 1.5;
     }

@@ -5,7 +5,7 @@ define([
 function(scene, Colors) {
 
   var Player = function() {
-  	this.mesh = new THREE.Object3D();
+  	this.mesh = new THREE.Group();
     this.mesh.name = "hacker";
 
     // legs
@@ -93,7 +93,7 @@ function(scene, Colors) {
     head.position.y += 70;
     head.position.x -= 5;
     head.position.z += 10;
-
+    this.head = head;
     //glasses
     var matGlasses = new THREE.MeshPhongMaterial({color:Colors.black, shading:THREE.FlatShading});
     var geomGlasses = new THREE.CubeGeometry(30, 30, 10);
