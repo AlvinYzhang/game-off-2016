@@ -78,6 +78,5 @@ define([
         player.moveLeft();
     }
   }
-
   init();
 });

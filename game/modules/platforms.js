@@ -20,7 +20,7 @@ function(Colors, scene) {
   var distance = 21;
   var startingY = 70;
   var createPlatform = function(y) {
-    var platformGeo = new THREE.CubeGeometry(20, 3, 200);
+    var platformGeo = new THREE.CubeGeometry(25, 3, 200);
     var matHair = new THREE.MeshPhongMaterial({color: Colors.hair, shading:THREE.FlatShading});
     window.platform = new THREE.Mesh(platformGeo, matHair);
     platform.castShadow = true;
