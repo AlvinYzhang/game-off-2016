@@ -11,7 +11,7 @@ function(Colors, scene, font) {
         text = request.responseText;
     }
   };
-	request.open('GET', 'dist/game.js', true);
+	request.open('GET', gamefile || 'dist/game.js', true);
   request.send(null);
 
   font = new THREE.Font(font);
@@ -31,7 +31,7 @@ function(Colors, scene, font) {
   var platforms = [];
   var distance = 21;
   var startingY = 70;
-  var lengthChars = 20;
+  var lengthChars = 10;
 
   var createPlatform = function(y, first) {
     var platformText = text.substr(0, lengthChars);
@@ -55,12 +55,12 @@ function(Colors, scene, font) {
 
       platform.position.y = -300;
       platform.position.x = 10 - (~~(Math.random()*70));
-      platform.position.z = -10;
+      platform.position.z = -15;
 
     } else {
       platform.position.y = y;
       platform.position.x = 10 - (~~(Math.random()*70));
-      platform.position.z = -10;
+      platform.position.z = -15;
     }
     platform.scale.set(0.5, 1, 1);
 
@@ -86,6 +86,7 @@ function(Colors, scene, font) {
     addStartingPlatform: addStartingPlatform,
     createPlatform: createPlatform,
     createAll: createAll,
-    platforms: platforms
+    platforms: platforms,
+    distance: distance
   }
 });

@@ -114,6 +114,11 @@ define([
       if (!frustum.intersectsObject(player.head)) {
         gameOver();
       }
+
+      if (!frustum.intersectsObject(platforms.platforms[0])) {
+        platforms.platforms.shift();
+        platforms.createPlatform(platforms.platforms[platforms.platforms.length-1].position.y + platforms.distance);  
+      }
         // player.mesh.position.y = platform.position.y + 1.5;
     }
 

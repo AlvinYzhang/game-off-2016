@@ -170,7 +170,7 @@ function(scene, Colors) {
     };
 
     this.checkJump = function() {
-      if (this.mesh.position.y > 100) {
+      if (this.mesh.position.y > 120) {
         this.moveRest = true;
       } else {
         this.moveRest = false;
