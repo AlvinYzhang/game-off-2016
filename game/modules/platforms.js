@@ -11,7 +11,7 @@ function(Colors, scene, font) {
         text = request.responseText;
     }
   };
-	request.open('GET', gamefile || 'dist/game.js', true);
+	request.open('GET', typeof gamefile === 'undefined' ? 'dist/game.js' : gamefile, true);
   request.send(null);
 
   font = new THREE.Font(font);
@@ -38,16 +38,29 @@ function(Colors, scene, font) {
     text = text.substr(lengthChars);
 
 
-    //var platformGeo = new THREE.CubeGeometry(40, 3, 20);
+    var platformGeo2 = new THREE.CubeGeometry(60, 5, 30);
     var platformGeo = new THREE.TextGeometry(platformText, {
       font: font,
-      size: 5,
+      size: 4,
       height: 20,
       curveSegments: 2
     });
 
+    var finalPlGeo = new THREE.Geometry();
+    var pl1Mesh = new THREE.Mesh(platformGeo);
+    var pl2Mesh = new THREE.Mesh(platformGeo2);
+
+
+    pl1Mesh.updateMatrix();
+    finalPlGeo.merge(pl1Mesh.geometry, pl1Mesh.matrix);
+
+    pl2Mesh.position.y = 1.5;
+    pl2Mesh.position.x = 20;
+    pl2Mesh.updateMatrix();
+    finalPlGeo.merge(pl2Mesh.geometry, pl2Mesh.matrix);
+
     var matHair = new THREE.MeshPhongMaterial({color: Colors.hair, shading:THREE.FlatShading});
-    window.platform = new THREE.Mesh(platformGeo, matHair);
+    window.platform = new THREE.Mesh(finalPlGeo, matHair);
     platform.castShadow = true;
     platform.receiveShadow = true;
     if (first) {
@@ -64,10 +77,10 @@ function(Colors, scene, font) {
     }
     platform.scale.set(0.5, 1, 1);
 
-    platform.bbox = new THREE.BoundingBoxHelper( platform, new THREE.MeshBasicMaterial());
+    // platform.bbox = new THREE.BoundingBoxHelper( platform, new THREE.MeshBasicMaterial());
     // platform.bbox.visible = false;
 
-    scene.scene.add(platform.bbox);
+    // scene.scene.add(platform.bbox);
     platforms.push(platform);
     scene.scene.add(platform);
   }
