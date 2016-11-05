@@ -16,12 +16,12 @@ function(Colors, scene) {
     return startingPlatform;
   }
 
-  var numberOfPlatforms = 7
+  var numberOfPlatforms = 10
   var platforms = [];
   var distance = 21;
   var startingY = 70;
   var createPlatform = function(y, first) {
-    var platformGeo = new THREE.CubeGeometry(25, 3, 200);
+    var platformGeo = new THREE.CubeGeometry(40, 3, 20);
     var matHair = new THREE.MeshPhongMaterial({color: Colors.hair, shading:THREE.FlatShading});
     window.platform = new THREE.Mesh(platformGeo, matHair);
     platform.castShadow = true;
@@ -30,13 +30,13 @@ function(Colors, scene) {
       platform.tempY = y;
 
       platform.position.y = -300;
-      platform.position.x = 15 - (~~(Math.random()*85));
-      platform.position.z = -65;
+      platform.position.x = 30 - (~~(Math.random()*100));
+      platform.position.z = -5;
 
     } else {
       platform.position.y = y;
-      platform.position.x = 15 - (~~(Math.random()*85));
-      platform.position.z = -65;
+      platform.position.x = 30 - (~~(Math.random()*100));
+      platform.position.z = -5;
     }
 
     platforms.push(platform);

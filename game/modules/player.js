@@ -171,7 +171,6 @@ function(scene, Colors) {
 
     this.checkJump = function() {
       if (this.mesh.position.y > 100) {
-        console.log('movedonw');
         this.moveRest = true;
       } else {
         this.moveRest = false;

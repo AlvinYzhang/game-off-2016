@@ -107,7 +107,7 @@ define([
       player.head.updateMatrixWorld(); // make sure plane's world matrix is updated
 
       var frustum = new THREE.Frustum();
-      frustum.setFromMatrix( new THREE.Matrix4().multiply(scene.camera.projectionMatrix, scene.camera.matrixWorldInverse));
+      frustum.setFromMatrix( new THREE.Matrix4().multiplyMatrices(scene.camera.projectionMatrix, scene.camera.matrixWorldInverse));
       if (!frustum.intersectsObject(player.head)) {
         gameOver();
       }
