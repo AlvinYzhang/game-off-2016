@@ -35,17 +35,27 @@ define([
       lastTime = time;
     }
     // player.mesh.rotation.y -= 0.05;
-    var caster = new THREE.Raycaster();
-    var ray = new THREE.Vector3(0, -1, 0);
-    caster.set(player.mesh.position, ray);
-    var collision = caster.intersectObjects([platform]);
 
-    scene.renderer.render(scene.scene, scene.camera);
-    if (collision.length && collision[0].distance < 3.5) {
-      player.mesh.position.y = platform.position.y + 1.5;
-      player.fallStop();
+    if (player.isFalling) {
+      var caster = new THREE.Raycaster();
+      var ray = new THREE.Vector3(0, -1, 0);
+      caster.set(player.mesh.position, ray);
+      var collision = caster.intersectObjects(platforms.platforms);
+
+      if (collision.length) {
+        console.log(collision);
+        // return;
+      }
+      for (var i = 0; i < collision.length; i++) {
+        if (collision[i].distance < 3.3) {
+          player.fallStop();
+          break;
+        }
+      }
+        // player.mesh.position.y = platform.position.y + 1.5;
     }
 
+    scene.renderer.render(scene.scene, scene.camera);
     requestAnimationFrame(loop);
   }
 
@@ -56,7 +66,7 @@ define([
     lights.createLights();
     staringPlatform = platforms.addStartingPlatform();
     console.log(platforms);
-    platforms.createPlatform();
+    platforms.createAll();
     loop();
     startGame();
   }
