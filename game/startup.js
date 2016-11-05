@@ -75,7 +75,7 @@ define([
       var caster = new THREE.Raycaster();
       var ray = new THREE.Vector3(0, -1, 0);
       caster.set(player.mesh.position, ray);
-      var collision = caster.intersectObjects(platforms.platforms);
+      var collision = caster.intersectObjects(platforms.platforms.concat([startingPlatform]));
 
       if (collision.length) {
         // return;

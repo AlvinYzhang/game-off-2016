@@ -192,13 +192,13 @@ function(scene, Colors) {
     }
 
     this.checkFall = function() {
-  		if (this.mesh.position.y > 48.5) {
+  		// if (this.mesh.position.y > 48.5) {
   			this.mesh.position.y -= this.fallSpeed;
   			this.fallSpeed++;
-  		} else {
-        this.mesh.position.y = 48.5;
-  			this.fallStop();
-  		}
+  		// } else {
+      //   this.mesh.position.y = 48.5;
+  		// 	this.fallStop();
+  		// }
     }
 
     this.moveRight = function() {
