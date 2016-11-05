@@ -278,6 +278,24 @@ var Player = function() {
 			this.fallStop();
 		}
   }
+
+  this.moveRight = function() {
+    if (this.mesh.position.x < 15) {
+      this.mesh.position.x += 5;
+    }
+    if (this.mesh.position.x > -25 && this.mesh.rotation.y > 0) {
+      TweenMax.to(this.mesh.rotation, 0.6, { y: -0.9 });
+    }
+  }
+
+  this.moveLeft = function() {
+    if (this.mesh.position.x > -70) {
+      this.mesh.position.x -= 5;
+    }
+    if (this.mesh.position.x < -25 && this.mesh.rotation.y < 0) {
+      TweenMax.to(this.mesh.rotation, 0.6, { y: 0.9 });
+    }
+  }
 };
 
 
@@ -363,4 +381,12 @@ function handleMouseMove(event) {
   mousePos = {x:tx, y:ty};
 }
 
+document.onkeydown = function(e) {
+  console.log(e.keyCode);
+  if (e.keyCode === 39) {
+    player.moveRight();
+  } else if (e.keyCode === 37) {
+      player.moveLeft();
+  }
+}
 window.addEventListener('load', init, false);
