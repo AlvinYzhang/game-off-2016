@@ -250,7 +250,7 @@ var Player = function() {
     if (!this.isJumping && !this.isFalling) {
       this.fallSpeed = 0;
       this.isJumping = true;
-      this.jumpSpeed = 7;
+      this.jumpSpeed = 8;
     }
   };
 
@@ -271,17 +271,19 @@ var Player = function() {
   }
 
   this.checkFall = function() {
-		if (this.mesh.position.y > 50) {
+		if (this.mesh.position.y > 48.5) {
 			this.mesh.position.y -= this.fallSpeed;
 			this.fallSpeed++;
 		} else {
+      this.mesh.position.y = 48.5;
 			this.fallStop();
 		}
   }
 
   this.moveRight = function() {
-    if (this.mesh.position.x < 15) {
-      this.mesh.position.x += 5;
+    if (this.mesh.position.x < 10) {
+      // this.mesh.position.x += 5;
+      TweenMax.to(this.mesh.position, 0.2, { x: this.mesh.position.x+5 });
     }
     if (this.mesh.position.x > -25 && this.mesh.rotation.y > 0) {
       TweenMax.to(this.mesh.rotation, 0.6, { y: -0.9 });
@@ -290,7 +292,8 @@ var Player = function() {
 
   this.moveLeft = function() {
     if (this.mesh.position.x > -70) {
-      this.mesh.position.x -= 5;
+      // this.mesh.position.x -= 5;
+      TweenMax.to(this.mesh.position, 0.2, { x: this.mesh.position.x-5 });
     }
     if (this.mesh.position.x < -25 && this.mesh.rotation.y < 0) {
       TweenMax.to(this.mesh.rotation, 0.6, { y: 0.9 });
@@ -307,7 +310,7 @@ var startGame = function() {
 
     TweenMax.to(platform.position, 2, {ease: "Strong.easeOut", y: 38, x: -30});
     TweenMax.to(player.mesh.scale, 2, {ease: "Strong.easeOut", z: 0.125, y: 0.125, x: 0.125});
-    TweenMax.to(player.mesh.position, 2, {ease: "Strong.easeOut", z: 0, y: 50, x: -50});
+    TweenMax.to(player.mesh.position, 2, {ease: "Strong.easeOut", z: 0, y: 48.5, x: -50});
     TweenMax.to(player.mesh.rotation, 2, {ease: "Strong.easeOut", y: 0.9, onComplete: player.jump.bind(player)});
   }, 2000);
 }
@@ -382,7 +385,6 @@ function handleMouseMove(event) {
 }
 
 document.onkeydown = function(e) {
-  console.log(e.keyCode);
   if (e.keyCode === 39) {
     player.moveRight();
   } else if (e.keyCode === 37) {
