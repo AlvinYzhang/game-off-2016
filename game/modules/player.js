@@ -214,6 +214,14 @@ function(scene, Colors) {
         TweenMax.to(this.mesh.rotation, 0.6, { y: 0.9 });
       }
     }
+
+    this.checkOrientation = function() {
+      if (this.mesh.position.x < -25 && this.mesh.rotation.y < 0) {
+        TweenMax.to(this.mesh.rotation, 0.6, { y: 0.9 });
+      } else if (this.mesh.position.x > -25 && this.mesh.rotation.y > 0) {
+        TweenMax.to(this.mesh.rotation, 0.6, { y: -0.9 });
+      }
+    }
   };
 
   var createPlayer = function() {

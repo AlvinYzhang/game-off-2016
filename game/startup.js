@@ -16,11 +16,9 @@ define([
   };
 
   function handleMouseMove(event) {
-    console.log(scene);
     var tx = -1 + (event.clientX / scene.WIDTH)*2;
     var ty = 1 - (event.clientY / scene.HEIGHT)*2;
     mousePos = {x:tx, y:ty};
-    console.log(mousePos);
   }
 
   function normalize(v,vmin,vmax,tmin, tmax){
@@ -50,7 +48,8 @@ define([
     if ((time - lastTime) > deltaTime) {
       if (player.isJumping) {
         var targetX = normalize(mousePos.x, -1, 1, -70, 10);
-        player.mesh.position.x = targetX;
+        TweenMax.to(player.mesh.position, 0.2, {x: targetX});
+        player.checkOrientation();
         player.checkJump();
       }
 
