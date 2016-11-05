@@ -230,7 +230,7 @@ var Player = function() {
   hair2.position.x -= 5;
   hair2.position.z -= 5;
 
-  var geomHair3 = new THREE.CubeGeometry(70, 10, 10);
+  var geomHair3 = new THREE.CubeGeometry(50, 10, 10);
   var hair3 = new THREE.Mesh(geomHair3, matHair);
   hair3.castShadow = true;
   hair3.receiveShadow = true;
@@ -248,9 +248,10 @@ var player;
 
 function createPlayer() {
   player = new Player();
-  player.mesh.scale.set(.5,.5,.5);
+  player.mesh.scale.set(.125,.125,.125);
   player.mesh.position.y = 50;
-  player.mesh.rotation.y -= 0.9;
+  player.mesh.position.x = -50;
+  player.mesh.rotation.y += 0.9;
   // player.mesh.rotation.y -= 0.19;
   scene.add(player.mesh);
 }
