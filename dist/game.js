@@ -2187,7 +2187,9 @@ define('game/modules/scene',[],function() {
     return {
       scene: scene,
       renderer: renderer,
-      camera: camera
+      camera: camera,
+      WIDTH: WIDTH,
+      HEIGHT: HEIGHT
     };
   }
 
@@ -2201,7 +2203,8 @@ define('game/modules/scene',[],function() {
 
   return {
     createScene: createScene,
-    scene: scene
+    scene: scene,
+    camera: camera
   };
 });
 
@@ -2258,7 +2261,7 @@ define('game/modules/player',[
 function(scene, Colors) {
 
   var Player = function() {
-  	this.mesh = new THREE.Object3D();
+  	this.mesh = new THREE.Group();
     this.mesh.name = "hacker";
 
     // legs
@@ -2346,7 +2349,7 @@ function(scene, Colors) {
     head.position.y += 70;
     head.position.x -= 5;
     head.position.z += 10;
-
+    this.head = head;
     //glasses
     var matGlasses = new THREE.MeshPhongMaterial({color:Colors.black, shading:THREE.FlatShading});
     var geomGlasses = new THREE.CubeGeometry(30, 30, 10);
@@ -2412,17 +2415,23 @@ function(scene, Colors) {
     this.isFalling = false;
     this.jumpSpeed = 0;
     this.fallSpeed = 0;
+    this.maxJumpSpeed = 8;
 
     this.jump = function() {
       if (!this.isJumping && !this.isFalling) {
         this.fallSpeed = 0;
         this.isJumping = true;
-        this.jumpSpeed = 8;
+        this.jumpSpeed = this.maxJumpSpeed;
       }
     };
 
     this.checkJump = function() {
-      this.mesh.position.y += this.jumpSpeed;
+      if (this.mesh.position.y > 100) {
+        this.moveRest = true;
+      } else {
+        this.moveRest = false;
+        this.mesh.position.y += this.jumpSpeed;
+      }
       this.jumpSpeed--;
       if (this.jumpSpeed === 0) {
         this.isJumping = false;
@@ -2438,13 +2447,13 @@ function(scene, Colors) {
     }
 
     this.checkFall = function() {
-  		if (this.mesh.position.y > 48.5) {
+  		// if (this.mesh.position.y > 48.5) {
   			this.mesh.position.y -= this.fallSpeed;
   			this.fallSpeed++;
-  		} else {
-        this.mesh.position.y = 48.5;
-  			this.fallStop();
-  		}
+  		// } else {
+      //   this.mesh.position.y = 48.5;
+  		// 	this.fallStop();
+  		// }
     }
 
     this.moveRight = function() {
@@ -2464,6 +2473,14 @@ function(scene, Colors) {
       }
       if (this.mesh.position.x < -25 && this.mesh.rotation.y < 0) {
         TweenMax.to(this.mesh.rotation, 0.6, { y: 0.9 });
+      }
+    }
+
+    this.checkOrientation = function() {
+      if (this.mesh.position.x < -25 && this.mesh.rotation.y < 0) {
+        TweenMax.to(this.mesh.rotation, 0.6, { y: 0.9 });
+      } else if (this.mesh.position.x > -25 && this.mesh.rotation.y > 0) {
+        TweenMax.to(this.mesh.rotation, 0.6, { y: -0.9 });
       }
     }
   };
@@ -2493,36 +2510,47 @@ define('game/modules/platforms',[
 function(Colors, scene) {
 
   var addStartingPlatform = function() {
-    var sPlatformGeo = new THREE.CubeGeometry(100, 20, 20);
+    var sPlatformGeo = new THREE.CubeGeometry(1000, 20, 200);
     var matHair = new THREE.MeshPhongMaterial({color: Colors.hair, shading:THREE.FlatShading});
     var startingPlatform = new THREE.Mesh(sPlatformGeo, matHair);
     startingPlatform.castShadow = true;
     startingPlatform.receiveShadow = true;
+    startingPlatform.position.y = -200;
     scene.scene.add(startingPlatform);
 
     return startingPlatform;
   }
 
-  var numberOfPlatforms = 7
+  var numberOfPlatforms = 10
   var platforms = [];
   var distance = 21;
   var startingY = 70;
-  var createPlatform = function(y) {
-    var platformGeo = new THREE.CubeGeometry(25, 3, 200);
+  var createPlatform = function(y, first) {
+    var platformGeo = new THREE.CubeGeometry(40, 3, 20);
     var matHair = new THREE.MeshPhongMaterial({color: Colors.hair, shading:THREE.FlatShading});
     window.platform = new THREE.Mesh(platformGeo, matHair);
     platform.castShadow = true;
     platform.receiveShadow = true;
-    platform.position.y = y;
-    platform.position.x = 15 - (~~(Math.random()*85));
-    platform.position.z = -65;
+    if (first) {
+      platform.tempY = y;
+
+      platform.position.y = -300;
+      platform.position.x = 30 - (~~(Math.random()*100));
+      platform.position.z = -5;
+
+    } else {
+      platform.position.y = y;
+      platform.position.x = 30 - (~~(Math.random()*100));
+      platform.position.z = -5;
+    }
+
     platforms.push(platform);
     scene.scene.add(platform);
   }
 
   var createAll = function() {
     for (var i = 0; i< numberOfPlatforms; i++) {
-      createPlatform(startingY + (i * distance));
+      createPlatform(startingY + (i * distance), true);
     }
   }
 
@@ -2543,16 +2571,53 @@ define('game/startup',[
 ], function(
   sceneClass, lights, playerClass, platforms, Colors
 ) {
-  // var player, staringPlatform;
-  var staringPlatform;
+  // var player, startingPlatform;
+
+  var startingPlatform;
   var scene, lights;
+  var mousePos = {
+    x: 0,
+    y: 0
+  };
+
+  function handleMouseMove(event) {
+    var tx = -1 + (event.clientX / scene.WIDTH)*2;
+    var ty = 1 - (event.clientY / scene.HEIGHT)*2;
+    mousePos = {x:tx, y:ty};
+  }
+
+  function normalize(v,vmin,vmax,tmin, tmax){
+
+  	var nv = Math.max(Math.min(v,vmax), vmin);
+  	var dv = vmax-vmin;
+  	var pc = (nv-vmin)/dv;
+  	var dt = tmax-tmin;
+  	var tv = tmin + (pc*dt);
+  	return tv;
+
+  }
+
+  var gameOver = function() {
+    player.isJumping = player.isFalling = false;
+    player.fallSpeed = player.jumpSpeed = 0;
+    TweenMax.to(player.mesh.scale, 2, {ease: "Strong.easeOut", z: 0.5, y: 0.5, x: 0.5});
+    TweenMax.to(player.mesh.position, 2, {ease: "Strong.easeOut", z: 60, y: 65, x: -30});
+    TweenMax.to(player.mesh.rotation, 2, {ease: "Strong.easeOut", y: 0});
+    platforms.platforms.forEach(function(pl) {
+      TweenMax.to(pl.position, 2, {ease: "Strong.easeOut", y: -300});
+    });
+    TweenMax.to(startingPlatform.position, 2, {ease: "Strong.easeOut", y: -300});
+  };
 
   var startGame = function() {
     setTimeout(function() {
-      TweenMax.to(staringPlatform.position, 2, {ease: "Strong.easeOut", y: 38, x: -30});
+      TweenMax.to(startingPlatform.position, 2, {ease: "Strong.easeOut", y: 38, x: -30});
       TweenMax.to(player.mesh.scale, 2, {ease: "Strong.easeOut", z: 0.125, y: 0.125, x: 0.125});
       TweenMax.to(player.mesh.position, 2, {ease: "Strong.easeOut", z: 0, y: 48.5, x: -50});
       TweenMax.to(player.mesh.rotation, 2, {ease: "Strong.easeOut", y: 0.9, onComplete: player.jump.bind(player)});
+      platforms.platforms.forEach(function(pl) {
+        TweenMax.to(pl.position, 2, {ease: "Strong.easeOut", y: pl.tempY});
+      });
     }, 2000);
   }
 
@@ -2562,7 +2627,18 @@ define('game/startup',[
     var time = new Date();
     if ((time - lastTime) > deltaTime) {
       if (player.isJumping) {
+        var targetX = normalize(mousePos.x, -1, 1, -70, 10);
+        TweenMax.to(player.mesh.position, 0.2, {x: targetX});
+        player.checkOrientation();
         player.checkJump();
+        if (player.moveRest) {
+          console.log('elo!');
+          platforms.platforms.forEach(function(pl) {
+            pl.position.y -= player.jumpSpeed;
+          });
+
+          startingPlatform.position.y -= player.jumpSpeed;
+        }
       }
 
       if (player.isFalling) {
@@ -2576,17 +2652,28 @@ define('game/startup',[
       var caster = new THREE.Raycaster();
       var ray = new THREE.Vector3(0, -1, 0);
       caster.set(player.mesh.position, ray);
-      var collision = caster.intersectObjects(platforms.platforms);
+      var collision = caster.intersectObjects(platforms.platforms.concat([startingPlatform]));
 
       if (collision.length) {
-        console.log(collision);
-        // return;
-      }
-      for (var i = 0; i < collision.length; i++) {
-        if (collision[i].distance < 3.3) {
-          player.fallStop();
-          break;
+        for (var i = 0; i < collision.length; i++) {
+          if (collision[i].distance < player.fallSpeed+1) {
+            player.fallStop();
+            break;
+          }
         }
+      }
+
+      scene.camera.updateMatrix(); // make sure camera's local matrix is updated
+      scene.camera.updateMatrixWorld(); // make sure camera's world matrix is updated
+      scene.camera.matrixWorldInverse.getInverse(scene.camera.matrixWorld);
+
+      player.head.updateMatrix(); // make sure plane's local matrix is updated
+      player.head.updateMatrixWorld(); // make sure plane's world matrix is updated
+
+      var frustum = new THREE.Frustum();
+      frustum.setFromMatrix( new THREE.Matrix4().multiplyMatrices(scene.camera.projectionMatrix, scene.camera.matrixWorldInverse));
+      if (!frustum.intersectsObject(player.head)) {
+        gameOver();
       }
         // player.mesh.position.y = platform.position.y + 1.5;
     }
@@ -2600,8 +2687,9 @@ define('game/startup',[
     sceneClass.scene = scene.scene;
     window.player = playerClass.createPlayer();
     lights.createLights();
-    staringPlatform = platforms.addStartingPlatform();
-    console.log(platforms);
+    startingPlatform = platforms.addStartingPlatform();
+
+    document.addEventListener('mousemove', handleMouseMove, false);
     platforms.createAll();
     loop();
     startGame();
