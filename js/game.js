@@ -198,6 +198,48 @@ var Player = function() {
   glasses3.position.x += 20;
   glasses3.scale.set(0.4, 0.4, 1);
 
+  var geomGlasses2 = new THREE.CubeGeometry(10, 10, 10);
+  var glasses4 = new THREE.Mesh(geomGlasses2, matCollar);
+  glasses4.castShadow = true;
+  glasses4.receiveShadow = true;
+  this.mesh.add(glasses4);
+  glasses4.position.y += 70;
+  glasses4.position.x -= 25;
+  glasses4.position.z += 36;
+
+  var glasses5 = glasses4.clone();
+  this.mesh.add(glasses5);
+  glasses5.position.x += 40;
+
+  var matHair = new THREE.MeshPhongMaterial({color:Colors.hair, shading:THREE.FlatShading});
+  var geomHair = new THREE.CubeGeometry(70, 10, 60);
+  var hair = new THREE.Mesh(geomHair, matHair);
+  hair.castShadow = true;
+  hair.receiveShadow = true;
+  this.mesh.add(hair);
+  hair.position.y += 100;
+  hair.position.x -= 5;
+  hair.position.z += 10;
+
+  var geomHair2 = new THREE.CubeGeometry(70, 30, 30);
+  var hair2 = new THREE.Mesh(geomHair2, matHair);
+  hair2.castShadow = true;
+  hair2.receiveShadow = true;
+  this.mesh.add(hair2);
+  hair2.position.y += 85;
+  hair2.position.x -= 5;
+  hair2.position.z -= 5;
+
+  var geomHair3 = new THREE.CubeGeometry(70, 10, 10);
+  var hair3 = new THREE.Mesh(geomHair3, matHair);
+  hair3.castShadow = true;
+  hair3.receiveShadow = true;
+  this.mesh.add(hair3);
+  hair3.position.y += 110;
+  hair3.position.x -= 5;
+  hair3.position.z += 5;
+
+
 };
 
 
@@ -208,12 +250,13 @@ function createPlane() {
   airplane = new Player();
   airplane.mesh.scale.set(.5,.5,.5);
   airplane.mesh.position.y = 50;
-  airplane.mesh.rotation.y -= 0.9;
+  airplane.mesh.rotation.y -= 2.19;
   // airplane.mesh.rotation.y -= 0.19;
   scene.add(airplane.mesh);
 }
 
 function loop(){
+  airplane.mesh.rotation.y -= 0.05;
   renderer.render(scene, camera);
   requestAnimationFrame(loop);
 }
