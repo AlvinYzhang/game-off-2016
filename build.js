@@ -5,6 +5,5 @@
     baseUrl: ".",
     name: "game/startup",
     out: "dist/game.js",
-    include: ["requireLib"],
-    optimize: 'none'
+    include: ["requireLib"]
 })
