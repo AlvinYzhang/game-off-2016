@@ -99,11 +99,29 @@ var Player = function() {
   leg1.receiveShadow = true;
   this.mesh.add(leg1);
 
+	var geomLegUp = new THREE.CubeGeometry(10, 10, 20);
+  var leg1a = new THREE.Mesh(geomLegUp, matLeg);
+	leg1a.castShadow = true;
+  leg1a.receiveShadow = true;
+  this.mesh.add(leg1a);
+  leg1a.position.y += 10;
+  leg1a.position.z += 5;
+
   var leg2 = new THREE.Mesh(geomLeg, matLeg);
   leg2.castShadow = true;
   leg2.receiveShadow = true;
   leg2.position.x -= 20;
   this.mesh.add(leg2);
+
+  var leg2a = new THREE.Mesh(geomLegUp, matLeg);
+  leg2a.castShadow = true;
+  leg2a.receiveShadow = true;
+  this.mesh.add(leg2a);
+  leg2a.position.y += 10;
+  leg2a.position.z += 5;
+  leg2a.position.x -= 20;
+
+  // belly
 };
 
 
@@ -113,7 +131,8 @@ var airplane;
 function createPlane(){
   airplane = new Player();
   airplane.mesh.scale.set(.5,.5,.5);
-  airplane.mesh.position.y = 100;
+  airplane.mesh.position.y = 50;
+  airplane.mesh.rotation.y += 0.2;
   scene.add(airplane.mesh);
 }
 
