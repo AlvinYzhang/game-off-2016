@@ -68,8 +68,8 @@ define([
       if (player.isJumping) {
         var targetX = normalize(mousePos.x, -1, 1, -270, 200);
         targetX = Math.max(Math.min(targetX, 20), -80);
+        player.checkOrientation(player.mesh.position.x, targetX);
         TweenMax.to(player.mesh.position, 0.2, {x: targetX});
-        player.checkOrientation();
         player.checkJump();
         if (player.moveRest) {
           platforms.platforms.forEach(function(pl) {

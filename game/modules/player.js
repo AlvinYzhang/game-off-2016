@@ -220,10 +220,12 @@ function(scene, Colors) {
       }
     }
 
-    this.checkOrientation = function() {
-      if (this.mesh.position.x < -25 && this.mesh.rotation.y < 0) {
+    this.checkOrientation = function(oldx, newx) {
+      // if (this.mesh.position.x < -25 && this.mesh.rotation.y < 0) {
+      if (oldx < newx) {
         TweenMax.to(this.mesh.rotation, 0.6, { y: 0.9 });
-      } else if (this.mesh.position.x > -25 && this.mesh.rotation.y > 0) {
+      // } else if (this.mesh.position.x > -25 && this.mesh.rotation.y > 0) {
+      } else if (oldx > newx){
         TweenMax.to(this.mesh.rotation, 0.6, { y: -0.9 });
       }
     }
