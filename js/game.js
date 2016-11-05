@@ -3,7 +3,8 @@ var Colors = {
     grey: 0xA9A9A9,
     white: 0xFFFFFF,
     skin: 0xFFD5A9,
-    hair: 0xFFD300
+    hair: 0xFFD300,
+    black: 0x4C4C4C
 };
 
 // THREEJS RELATED VARIABLES
@@ -166,14 +167,37 @@ var Player = function() {
   collar3.position.x += 10;
   this.mesh.add(collar3);
 
-  var geomHead = new THREE.CubeGeometry(40, 40, 40);
+
+  //head
+  var geomHead = new THREE.CubeGeometry(50, 50, 40);
   var head = new THREE.Mesh(geomHead, matNeck);
   head.castShadow = true;
   head.receiveShadow = true;
   this.mesh.add(head);
-  head.position.y += 65;
+  head.position.y += 70;
   head.position.x -= 5;
   head.position.z += 10;
+
+  //glasses
+  var matGlasses = new THREE.MeshPhongMaterial({color:Colors.black, shading:THREE.FlatShading});
+  var geomGlasses = new THREE.CubeGeometry(30, 30, 10);
+  var glasses = new THREE.Mesh(geomGlasses, matGlasses);
+  glasses.castShadow = true;
+  glasses.receiveShadow = true;
+  this.mesh.add(glasses);
+  glasses.position.y += 70;
+  glasses.position.x -= 25;
+  glasses.position.z += 35;
+
+  var glasses2 = glasses.clone();
+  this.mesh.add(glasses2);
+  glasses2.position.x += 40;
+
+  var glasses3 = glasses.clone();
+  this.mesh.add(glasses3);
+  glasses3.position.x += 20;
+  glasses3.scale.set(0.4, 0.4, 1);
+
 };
 
 
@@ -185,6 +209,7 @@ function createPlane() {
   airplane.mesh.scale.set(.5,.5,.5);
   airplane.mesh.position.y = 50;
   airplane.mesh.rotation.y -= 0.9;
+  // airplane.mesh.rotation.y -= 0.19;
   scene.add(airplane.mesh);
 }
 
