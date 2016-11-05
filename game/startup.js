@@ -38,6 +38,9 @@ define([
       TweenMax.to(player.mesh.scale, 2, {ease: "Strong.easeOut", z: 0.125, y: 0.125, x: 0.125});
       TweenMax.to(player.mesh.position, 2, {ease: "Strong.easeOut", z: 0, y: 48.5, x: -50});
       TweenMax.to(player.mesh.rotation, 2, {ease: "Strong.easeOut", y: 0.9, onComplete: player.jump.bind(player)});
+      platforms.platforms.forEach(function(pl) {
+        TweenMax.to(pl.position, 2, {ease: "Strong.easeOut", y: pl.tempY});
+      });
     }, 2000);
   }
 
