@@ -36,7 +36,7 @@ function(Colors, scene, font) {
   var createPlatform = function(y, first) {
     var platformText = text.substr(0, lengthChars);
     text = text.substr(lengthChars);
-    platformText = platformText.replace(/\@/gi, 'E');
+    platformText = platformText.replace(/\@/gi, 'E').toLowerCase();
     var platformGeo2 = new THREE.CubeGeometry(60, 5, 30);
     var platformGeo = new THREE.TextGeometry(platformText, {
       font: font,
@@ -95,7 +95,7 @@ function(Colors, scene, font) {
 
     } else {
       platform.position.y = y;
-      platform.position.x = 10 - (~~(Math.random()*70));
+      platform.position.x = 20 - (~~(Math.random()*90));
       platform.position.z = -15;
     }
     platform.scale.set(0.5, 1, 1);

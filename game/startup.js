@@ -118,7 +118,11 @@ define([
       }
 
       if (!frustum.intersectsObject(platforms.platforms[0])) {
-        platforms.platforms.shift();
+        var oldPlatform = platforms.platforms.shift();
+        if (oldPlatform.tween) {
+          oldPlatform.tween.kill();
+        }
+        scene.scene.remove(oldPlatform);
         var newPlatform = platforms.createPlatform(platforms.platforms[platforms.platforms.length-1].position.y + platforms.distance);
         newPlatform.action();
       }
