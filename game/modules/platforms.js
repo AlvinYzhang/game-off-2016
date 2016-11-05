@@ -27,7 +27,7 @@ function(Colors, scene, font) {
     return startingPlatform;
   }
 
-  var numberOfPlatforms = 10
+  var numberOfPlatforms = 30;
   var platforms = [];
   var distance = 21;
   var startingY = 70;
@@ -42,7 +42,7 @@ function(Colors, scene, font) {
     var platformGeo = new THREE.TextGeometry(platformText, {
       font: font,
       size: 4,
-      height: 20,
+      height: 18,
       curveSegments: 2
     });
 
@@ -55,12 +55,22 @@ function(Colors, scene, font) {
     finalPlGeo.merge(pl1Mesh.geometry, pl1Mesh.matrix);
 
     pl2Mesh.position.y = 1.5;
-    pl2Mesh.position.x = 20;
+    pl2Mesh.position.x = 21;
     pl2Mesh.updateMatrix();
     finalPlGeo.merge(pl2Mesh.geometry, pl2Mesh.matrix);
 
+    var matSuper = new THREE.MeshPhongMaterial({color: Colors.green, shading:THREE.FlatShading});
     var matHair = new THREE.MeshPhongMaterial({color: Colors.hair, shading:THREE.FlatShading});
-    window.platform = new THREE.Mesh(finalPlGeo, matHair);
+
+    var useSuper = false;
+    var superKeyword = ['function', 'timeout', 'interval', 'for', 'var', 'new', 'window', 'return'];
+    superKeyword.forEach(function(keyword) {
+      if (platformText.indexOf(keyword) > -1) {
+        useSuper = true;
+      }
+    });
+    window.platform = new THREE.Mesh(finalPlGeo, useSuper ? matSuper : matHair);
+    platform.super = useSuper;
     platform.castShadow = true;
     platform.receiveShadow = true;
     if (first) {

@@ -93,11 +93,13 @@ define([
       caster.set(player.mesh.position, ray);
       // var collision = caster.intersectObjects(platforms.platforms.map(function(p){ return p.bbox; }).concat([startingPlatform]));
       var collision = caster.intersectObjects(platforms.platforms.concat([startingPlatform]));
-
       if (collision.length) {
         for (var i = 0; i < collision.length; i++) {
           if (collision[i].distance < player.fallSpeed+1) {
             player.fallStop();
+            if (collision[i].object.super) {
+              player.jumpSpeed = 20;
+            }
             break;
           }
         }

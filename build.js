@@ -5,5 +5,6 @@
     baseUrl: ".",
     name: "game/startup",
     out: "dist/game.js",
-    include: ["requireLib"]
+    include: ["requireLib"],
+    preserveLicenseComments: false
 })
