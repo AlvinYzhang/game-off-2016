@@ -165,6 +165,15 @@ var Player = function() {
   collar3.position.z -= 10;
   collar3.position.x += 10;
   this.mesh.add(collar3);
+
+  var geomHead = new THREE.CubeGeometry(40, 40, 40);
+  var head = new THREE.Mesh(geomHead, matNeck);
+  head.castShadow = true;
+  head.receiveShadow = true;
+  this.mesh.add(head);
+  head.position.y += 65;
+  head.position.x -= 5;
+  head.position.z += 10;
 };
 
 
