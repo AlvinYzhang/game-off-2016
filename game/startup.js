@@ -84,11 +84,14 @@ define([
     }
     // player.mesh.rotation.y -= 0.05;
 
+    platforms.platforms.forEach(function(pl) {
+      pl.bbox.update();
+    });
     if (player.isFalling) {
       var caster = new THREE.Raycaster();
       var ray = new THREE.Vector3(0, -1, 0);
       caster.set(player.mesh.position, ray);
-      var collision = caster.intersectObjects(platforms.platforms.concat([startingPlatform]));
+      var collision = caster.intersectObjects(platforms.platforms.map(function(p){ return p.bbox; }).concat([startingPlatform]));
 
       if (collision.length) {
         for (var i = 0; i < collision.length; i++) {

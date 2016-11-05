@@ -32,6 +32,7 @@ function(Colors, scene, font) {
   var distance = 21;
   var startingY = 70;
   var lengthChars = 20;
+
   var createPlatform = function(y, first) {
     var platformText = text.substr(0, lengthChars);
     text = text.substr(lengthChars);
@@ -53,15 +54,20 @@ function(Colors, scene, font) {
       platform.tempY = y;
 
       platform.position.y = -300;
-      platform.position.x = 20 - (~~(Math.random()*90));
+      platform.position.x = 10 - (~~(Math.random()*70));
       platform.position.z = -10;
 
     } else {
       platform.position.y = y;
-      platform.position.x = 20 - (~~(Math.random()*90));
+      platform.position.x = 10 - (~~(Math.random()*70));
       platform.position.z = -10;
     }
+    platform.scale.set(0.5, 1, 1);
 
+    platform.bbox = new THREE.BoundingBoxHelper( platform, new THREE.MeshBasicMaterial());
+    // platform.bbox.visible = false;
+
+    scene.scene.add(platform.bbox);
     platforms.push(platform);
     scene.scene.add(platform);
   }
