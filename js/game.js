@@ -143,7 +143,28 @@ var Player = function() {
   this.mesh.add(neck);
   neck.position.y += 40;
   neck.position.x -= 5;
-  neck.position.z += 10;
+  neck.position.z += 15;
+
+  //collar
+  var geomCollar = new THREE.CubeGeometry(10, 10, 30);
+  var matCollar = new THREE.MeshPhongMaterial({color:Colors.white, shading:THREE.FlatShading});
+  var collar = new THREE.Mesh(geomCollar, matCollar);
+  collar.castShadow = true;
+  collar.receiveShadow = true;
+  this.mesh.add(collar);
+  collar.position.y += 40;
+  collar.position.x -= 15;
+  collar.position.z += 10;
+
+  var collar2 = collar.clone();
+  collar2.position.x += 20;
+  this.mesh.add(collar2);
+
+  var collar3 = collar.clone();
+  collar3.rotation.y += Math.PI/2;
+  collar3.position.z -= 10;
+  collar3.position.x += 10;
+  this.mesh.add(collar3);
 };
 
 
