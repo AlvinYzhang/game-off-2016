@@ -43,6 +43,8 @@ function createScene() {
 
   renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
   renderer.setSize(WIDTH, HEIGHT);
+  renderer.shadowMap.enabled = true;
+
   container = document.getElementById('game');
   container.appendChild(renderer.domElement);
 
@@ -70,7 +72,7 @@ function createLights() {
 
   ambientLight = new THREE.AmbientLight(0xdc8874, .5);
 
-  shadowLight = new THREE.DirectionalLight(0xffffff, .9);
+  shadowLight = new THREE.DirectionalLight(0xffffff, 0.9);
   shadowLight.position.set(150, 350, 350);
   shadowLight.castShadow = true;
   shadowLight.shadow.camera.left = -400;
@@ -239,24 +241,95 @@ var Player = function() {
   hair3.position.x -= 5;
   hair3.position.z += 5;
 
+  this.isJumping = false;
+  this.isFalling = false;
+  this.jumpSpeed = 0;
+  this.fallSpeed = 0;
 
+  this.jump = function() {
+    if (!this.isJumping && !this.isFalling) {
+      this.fallSpeed = 0;
+      this.isJumping = true;
+      this.jumpSpeed = 7;
+    }
+  };
+
+  this.checkJump = function() {
+    this.mesh.position.y += this.jumpSpeed;
+    this.jumpSpeed--;
+    if (this.jumpSpeed === 0) {
+      this.isJumping = false;
+      this.isFalling = true;
+      this.fallSpeed = 1;
+    }
+  }
+
+  this.fallStop = function() {
+    this.isFalling = false;
+    this.fallSpeed = 0;
+    this.jump();
+  }
+
+  this.checkFall = function() {
+		if (this.mesh.position.y > 50) {
+			this.mesh.position.y -= this.fallSpeed;
+			this.fallSpeed++;
+		} else {
+			this.fallStop();
+		}
+  }
 };
 
 
 // 3D Models
-var player;
+var player, platform;
+
+var startGame = function() {
+  setTimeout(function() {
+
+    TweenMax.to(platform.position, 2, {ease: "Strong.easeOut", y: 38, x: -30});
+    TweenMax.to(player.mesh.scale, 2, {ease: "Strong.easeOut", z: 0.125, y: 0.125, x: 0.125});
+    TweenMax.to(player.mesh.position, 2, {ease: "Strong.easeOut", z: 0, y: 50, x: -50});
+    TweenMax.to(player.mesh.rotation, 2, {ease: "Strong.easeOut", y: 0.9, onComplete: player.jump.bind(player)});
+  }, 2000);
+}
 
 function createPlayer() {
   player = new Player();
-  player.mesh.scale.set(.125,.125,.125);
-  player.mesh.position.y = 50;
-  player.mesh.position.x = -50;
-  player.mesh.rotation.y += 0.9;
   // player.mesh.rotation.y -= 0.19;
+  player.mesh.scale.set(.5,.5,.5);
+  player.mesh.position.y = 65;
+  player.mesh.position.x -= 30;
+  // player.mesh.rotation.y -= 0.4;
+  player.mesh.position.z = 60;
+
   scene.add(player.mesh);
+
+  // player.jump();
+  var platformGeo = new THREE.CubeGeometry(100, 20, 20);
+  var matHair = new THREE.MeshPhongMaterial({color:Colors.hair, shading:THREE.FlatShading});
+  platform = new THREE.Mesh(platformGeo, matHair);
+  platform.castShadow = true;
+  platform.receiveShadow = true;
+  scene.add(platform);
+
 }
 
-function loop(){
+
+var lastTime = new Date();
+var deltaTime = 1000/33;
+function loop() {
+  var time = new Date();
+  if ((time - lastTime) > deltaTime) {
+    if (player.isJumping) {
+      player.checkJump();
+    }
+
+    if (player.isFalling) {
+      player.checkFall();
+    }
+    lastTime = time;
+  }
   // player.mesh.rotation.y -= 0.05;
   renderer.render(scene, camera);
   requestAnimationFrame(loop);
@@ -277,6 +350,7 @@ function init(event){
   createLights();
   createPlayer();
   loop();
+  startGame();
 }
 
 // HANDLE MOUSE EVENTS
