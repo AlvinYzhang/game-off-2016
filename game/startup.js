@@ -43,7 +43,7 @@ define([
     player.fallSpeed = player.jumpSpeed = 0;
     TweenMax.to(player.mesh.scale, 2, {ease: "Strong.easeOut", z: 0.45, y: 0.45, x: 0.45});
     TweenMax.to(player.mesh.position, 2, {ease: "Strong.easeOut", z: 60, y: 65, x: -30});
-    TweenMax.to(player.mesh.rotation, 2, {ease: "Strong.easeOut", y: 0});
+    TweenMax.to(player.mesh.rotation, 2, {ease: "Strong.easeOut", y: -0.3});
     platforms.platforms.forEach(function(pl) {
       TweenMax.to(pl.position, 2, {ease: "Strong.easeOut", y: -300});
     });
@@ -91,7 +91,7 @@ define([
           });
 
           clouds.clouds.forEach(function(cl) {
-            cl.position.y -= player.jumpSpeed;
+            cl.position.y -= player.jumpSpeed * 0.5;
           });
 
           startingPlatform.position.y -= player.jumpSpeed;

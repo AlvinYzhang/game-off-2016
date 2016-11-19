@@ -258,6 +258,8 @@ function(scene, Colors) {
         TweenMax.to(this.mesh.rotation, 0.6, { y: 0.9 });
       } else if (oldx > newx){
         TweenMax.to(this.mesh.rotation, 0.6, { y: -0.9 });
+      } else {
+        TweenMax.to(this.mesh.rotation, 0.3, { y: 0 });
       }
     }
   };
