@@ -155,12 +155,6 @@ function(scene, Colors) {
     hair3.position.x -= 5;
     hair3.position.z += 5;
 
-    this.isJumping = false;
-    this.isFalling = false;
-    this.jumpSpeed = 0;
-    this.fallSpeed = 0;
-    this.maxJumpSpeed = 9;
-
     var fringeGeometry = new THREE.CubeGeometry(10, 10, 10);
     var fringeMesh = new THREE.Mesh(fringeGeometry, matHair);
     fringeMesh.geometry.applyMatrix(new THREE.Matrix4().makeTranslation(0,5,0));
@@ -197,6 +191,12 @@ function(scene, Colors) {
       });
     };
 
+    this.isJumping = false;
+    this.isFalling = false;
+    this.jumpSpeed = 0;
+    this.fallSpeed = 0;
+    this.maxJumpSpeed = 6.5;
+
     this.jump = function() {
       if (!this.isJumping && !this.isFalling) {
         this.fallSpeed = 0;
@@ -213,7 +213,8 @@ function(scene, Colors) {
         this.moveRest = false;
         this.mesh.position.y += this.jumpSpeed;
       }
-      this.jumpSpeed--;
+      // this.jumpSpeed--;
+      this.jumpSpeed -= 0.5;
       if (this.jumpSpeed === 0) {
         this.isJumping = false;
         this.isFalling = true;
@@ -230,7 +231,7 @@ function(scene, Colors) {
     this.checkFall = function() {
       fringeUpdate();
 			this.mesh.position.y -= this.fallSpeed;
-			this.fallSpeed++;
+			this.fallSpeed += 0.5;
     }
 
     this.moveRight = function() {

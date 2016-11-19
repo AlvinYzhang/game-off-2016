@@ -4,9 +4,10 @@ define([
   './modules/player',
   './modules/platforms',
   './modules/colors',
-  './modules/title'
+  './modules/title',
+  './modules/clouds'
 ], function(
-  sceneClass, lights, playerClass, platforms, Colors, title
+  sceneClass, lights, playerClass, platforms, Colors, title, clouds
 ) {
   // var player, startingPlatform;
 
@@ -70,6 +71,11 @@ define([
   function loop() {
     var time = new Date();
     if ((time - lastTime) > deltaTime) {
+      // if (!GAME_RUNNING) {
+      //   clouds.clouds.forEach(function(cl, index) {
+      //     cl.position.y -= 0.5;
+      //   });
+      // }
       if (player.isJumping) {
         var targetX = normalize(mousePos.x, -1, 1, -270, 200);
         targetX = Math.max(Math.min(targetX, 20), -80);
@@ -77,11 +83,15 @@ define([
         TweenMax.to(player.mesh.position, 0.2, {x: targetX});
         player.checkJump();
         if (player.moveRest) {
-          if (player.jumpSpeed > 5) {
-            score += player.jumpSpeed;
+          if (player.jumpSpeed > 4.5) {
+            score += Math.round(player.jumpSpeed);
           }
           platforms.platforms.forEach(function(pl) {
             pl.position.y -= player.jumpSpeed;
+          });
+
+          clouds.clouds.forEach(function(cl) {
+            cl.position.y -= player.jumpSpeed * 0.5;
           });
 
           startingPlatform.position.y -= player.jumpSpeed;
@@ -105,7 +115,7 @@ define([
           if (collision[i].distance < player.fallSpeed+1) {
             player.fallStop();
             if (collision[i].object.super) {
-              player.jumpSpeed = 15;
+              player.jumpSpeed = 12;
             }
             break;
           }
@@ -134,9 +144,17 @@ define([
         var newPlatform = platforms.createPlatform(platforms.platforms[platforms.platforms.length-1].position.y + platforms.distance);
         newPlatform.action();
       }
+
+      if (!frustum.intersectsObject(clouds.clouds[0].children[0])) {
+        var oldCloud = clouds.clouds.shift();
+        scene.scene.remove(oldCloud);
+
+        var newCloud = clouds.Cloud();
+        newCloud.position.y = clouds.clouds[clouds.clouds.length-1].position.y + 400 + ~~(Math.random()*50);
+      }
         // player.mesh.position.y = platform.position.y + 1.5;
     }
-
+    window.clouds = clouds;
     scene.renderer.render(scene.scene, scene.camera);
     requestAnimationFrame(loop);
 
@@ -157,7 +175,7 @@ define([
     scoreDiv.className = 'score';
     scoreDiv.innerText = score;
     document.body.appendChild(scoreDiv);
-
+    clouds.createAll();
     title.init();
     loop();
   }

@@ -92,7 +92,7 @@ function(Colors, scene, font) {
       platform.tempY = y;
 
       platform.position.y = -300;
-      platform.position.x = 10 - (~~(Math.random()*70));
+      platform.position.x = 20 - (~~(Math.random()*90));
       platform.position.z = -15;
 
     } else {
