@@ -5,20 +5,22 @@ define([
 ],
 function(Colors, scene, font) {
   var text;
+  var textCopy;
   var request = new XMLHttpRequest();
   request.onreadystatechange = function () {
     if (this.readyState === 4) {
-        text = request.responseText;
+        textCopy = text = request.responseText;
     }
   };
 	request.open('GET', typeof gamefile === 'undefined' ? 'dist/game.js' : gamefile, true);
   request.send(null);
 
   font = new THREE.Font(font);
+
   var addStartingPlatform = function() {
     var sPlatformGeo = new THREE.CubeGeometry(1000, 20, 200);
     var matHair = new THREE.MeshPhongMaterial({color: Colors.hair, shading:THREE.FlatShading});
-    var startingPlatform = new THREE.Mesh(sPlatformGeo, matHair);
+    startingPlatform = new THREE.Mesh(sPlatformGeo, matHair);
     startingPlatform.castShadow = true;
     startingPlatform.receiveShadow = true;
     startingPlatform.position.y = -200;
@@ -120,11 +122,21 @@ function(Colors, scene, font) {
     }
   }
 
+  var resetPlatforms = function() {
+    text = textCopy;
+    platforms.forEach(function(pl){
+      scene.scene.remove(pl);
+    });
+    startingPlatform.position.y = -200;
+    createAll();
+  }
+
   return {
     addStartingPlatform: addStartingPlatform,
     createPlatform: createPlatform,
     createAll: createAll,
     platforms: platforms,
-    distance: distance
+    distance: distance,
+    resetPlatforms: resetPlatforms
   }
 });

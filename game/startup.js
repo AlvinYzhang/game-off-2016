@@ -14,6 +14,7 @@ define([
   var scene, lights;
   var score = 0;
   var scoreDiv;
+  var GAME_RUNNING = false;
   var mousePos = {
     x: 0,
     y: 0
@@ -45,25 +46,23 @@ define([
     platforms.platforms.forEach(function(pl) {
       TweenMax.to(pl.position, 2, {ease: "Strong.easeOut", y: -300});
     });
-    TweenMax.to(startingPlatform.position, 2, {ease: "Strong.easeOut", y: -300});
+    TweenMax.to(startingPlatform.position, 2, {ease: "Strong.easeOut", y: -300, onComplete: function(){ GAME_RUNNING = false; }});
     title.show();
   };
 
   var startGame = function() {
-    setTimeout(function() {
-      TweenMax.to(startingPlatform.position, 2, {ease: "Strong.easeOut", y: 38, x: -30});
-      TweenMax.to(player.mesh.scale, 2, {ease: "Strong.easeOut", z: 0.125, y: 0.125, x: 0.125});
-      TweenMax.to(player.mesh.position, 2, {ease: "Strong.easeOut", z: 0, y: 48.5, x: -50});
-      TweenMax.to(player.mesh.rotation, 2, {ease: "Strong.easeOut", y: 0.9, onComplete: player.jump.bind(player)});
-      platforms.platforms.forEach(function(pl) {
-        TweenMax.to(pl.position, 2, {ease: "Strong.easeOut", y: pl.tempY});
-      });
-      platforms.platforms.forEach(function(pl) {
-        pl.action();
-      });
-
-      title.hide();
-    }, 2000);
+    GAME_RUNNING = true;
+    TweenMax.to(startingPlatform.position, 2, {ease: "Strong.easeOut", y: 38, x: -30});
+    TweenMax.to(player.mesh.scale, 2, {ease: "Strong.easeOut", z: 0.125, y: 0.125, x: 0.125});
+    TweenMax.to(player.mesh.position, 2, {ease: "Strong.easeOut", z: 0, y: 48.5, x: -50});
+    TweenMax.to(player.mesh.rotation, 2, {ease: "Strong.easeOut", y: 0.9, onComplete: player.jump.bind(player)});
+    platforms.platforms.forEach(function(pl) {
+      TweenMax.to(pl.position, 2, {ease: "Strong.easeOut", y: pl.tempY});
+    });
+    platforms.platforms.forEach(function(pl) {
+      pl.action();
+    });
+    title.hide();
   }
 
   var lastTime = new Date();
@@ -147,12 +146,12 @@ define([
   function init(event) {
     scene = sceneClass.createScene();
     sceneClass.scene = scene.scene;
-    window.player = playerClass.createPlayer();
+    player = playerClass.createPlayer();
     lights.createLights();
     startingPlatform = platforms.addStartingPlatform();
 
     document.addEventListener('mousemove', handleMouseMove, false);
-    platforms.createAll();
+    // platforms.createAll();
 
     scoreDiv = document.createElement('div');
     scoreDiv.className = 'score';
@@ -161,9 +160,16 @@ define([
 
     title.init();
     loop();
-    startGame();
   }
 
+  document.onclick = function() {
+    if (!GAME_RUNNING) {
+      score = 0;
+      scoreDiv.innerText = score;
+      platforms.resetPlatforms();
+      startGame();
+    }
+  }
   document.onkeydown = function(e) {
     if (e.keyCode === 39) {
       player.moveRight();
