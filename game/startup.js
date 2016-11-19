@@ -11,6 +11,8 @@ define([
 
   var startingPlatform;
   var scene, lights;
+  var score = 0;
+  var scoreDiv;
   var mousePos = {
     x: 0,
     y: 0
@@ -72,6 +74,9 @@ define([
         TweenMax.to(player.mesh.position, 0.2, {x: targetX});
         player.checkJump();
         if (player.moveRest) {
+          if (player.jumpSpeed > 5) {
+            score += player.jumpSpeed;
+          }
           platforms.platforms.forEach(function(pl) {
             pl.position.y -= player.jumpSpeed;
           });
@@ -131,6 +136,8 @@ define([
 
     scene.renderer.render(scene.scene, scene.camera);
     requestAnimationFrame(loop);
+
+    scoreDiv.innerText = score;
   }
 
   function init(event) {
@@ -142,6 +149,12 @@ define([
 
     document.addEventListener('mousemove', handleMouseMove, false);
     platforms.createAll();
+
+    scoreDiv = document.createElement('div');
+    scoreDiv.className = 'score';
+    scoreDiv.innerText = score;
+    document.body.appendChild(scoreDiv);
+
     loop();
     startGame();
   }
