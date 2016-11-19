@@ -31,7 +31,7 @@ define([
   }
 
   var clouds = [];
-  var numberOfClouds = 8;
+  var numberOfClouds = 5;
 
   var createAll = function() {
     var cloud;

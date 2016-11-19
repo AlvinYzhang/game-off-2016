@@ -30,6 +30,8 @@ define(function() {
     camera.position.z = 130;
     camera.position.y = 100;
 
+    scene.fog = new THREE.Fog(0x1ec503, 0.5, 450);
+
     renderer = new THREE.WebGLRenderer({ alpha: true, antialias: false });
     renderer.setSize(WIDTH, HEIGHT);
     renderer.shadowMap.enabled = true;

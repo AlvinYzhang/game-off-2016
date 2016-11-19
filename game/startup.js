@@ -91,7 +91,7 @@ define([
           });
 
           clouds.clouds.forEach(function(cl) {
-            cl.position.y -= player.jumpSpeed * 0.5;
+            cl.position.y -= player.jumpSpeed;
           });
 
           startingPlatform.position.y -= player.jumpSpeed;

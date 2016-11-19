@@ -11,7 +11,7 @@ body{
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background: linear-gradient(#1ec503, #000000);
+  background: linear-gradient(#000000, #1ec503);
 }
 
 .score {
