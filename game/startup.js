@@ -70,9 +70,6 @@ define([
   function loop() {
     var time = new Date();
     if ((time - lastTime) > deltaTime) {
-      if (!GAME_RUNNING) {
-        player.fringeUpdate();
-      }
       if (player.isJumping) {
         var targetX = normalize(mousePos.x, -1, 1, -270, 200);
         targetX = Math.max(Math.min(targetX, 20), -80);

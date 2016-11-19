@@ -165,10 +165,11 @@ function(scene, Colors) {
     var fringeMesh = new THREE.Mesh(fringeGeometry, matHair);
     fringeMesh.geometry.applyMatrix(new THREE.Matrix4().makeTranslation(0,5,0));
 
-    fringeMesh.position.y = 95;
+    var basicY;
+    fringeMesh.position.y = basicY = 95;
     fringeMesh.position.z = 35;
     fringeMesh.position.x = 25;
-
+    fringeMesh.basicY = 95;
     this.fringe = new THREE.Object3D();
 
     for (var i = 0; i < 7; i++) {
@@ -177,21 +178,24 @@ function(scene, Colors) {
       this.fringe.add(fringeElement);
     }
     this.mesh.add(this.fringe);
-
+    var self = this;
     var fringeAngle = 0;
-    this.fringeUpdate = function() {
-      var elements = this.fringe.children;
+
+    var fringeUpdate = function() {
+      var elements = self.fringe.children;
       elements.forEach(function(elem, index) {
-        elem.scale.y = 0.75 + Math.cos(fringeAngle + index/7) * 0.25;
+        elem.position.y = basicY + ((0.5 + Math.cos(fringeAngle + index/3) * 0.5) * 5);
       });
 
       fringeAngle += 0.16;
     }
 
-    // this.resetFringe = function() {
-    //   var elements = this.fringe.children;
-    //
-    // };
+    var resetFringe = function() {
+      var elements = self.fringe.children;
+      elements.forEach(function(elem, index) {
+        elem.position.y = basicY;
+      });
+    };
 
     this.jump = function() {
       if (!this.isJumping && !this.isFalling) {
@@ -202,6 +206,7 @@ function(scene, Colors) {
     };
 
     this.checkJump = function() {
+      resetFringe();
       if (this.mesh.position.y > 80) {
         this.moveRest = true;
       } else {
@@ -223,13 +228,9 @@ function(scene, Colors) {
     }
 
     this.checkFall = function() {
-  		// if (this.mesh.position.y > 48.5) {
-  			this.mesh.position.y -= this.fallSpeed;
-  			this.fallSpeed++;
-  		// } else {
-      //   this.mesh.position.y = 48.5;
-  		// 	this.fallStop();
-  		// }
+      fringeUpdate();
+			this.mesh.position.y -= this.fallSpeed;
+			this.fallSpeed++;
     }
 
     this.moveRight = function() {
@@ -244,7 +245,6 @@ function(scene, Colors) {
 
     this.moveLeft = function() {
       if (this.mesh.position.x > -70) {
-        // this.mesh.position.x -= 5;
         TweenMax.to(this.mesh.position, 0.2, { x: this.mesh.position.x-10 });
       }
       if (this.mesh.position.x < -25 && this.mesh.rotation.y < 0) {
@@ -253,10 +253,8 @@ function(scene, Colors) {
     }
 
     this.checkOrientation = function(oldx, newx) {
-      // if (this.mesh.position.x < -25 && this.mesh.rotation.y < 0) {
       if (oldx < newx) {
         TweenMax.to(this.mesh.rotation, 0.6, { y: 0.9 });
-      // } else if (this.mesh.position.x > -25 && this.mesh.rotation.y > 0) {
       } else if (oldx > newx){
         TweenMax.to(this.mesh.rotation, 0.6, { y: -0.9 });
       }
@@ -265,13 +263,11 @@ function(scene, Colors) {
 
   var createPlayer = function() {
     player = new Player();
-    // player.mesh.rotation.y -= 0.19;
     player.mesh.scale.set(.45,.45,.45);
     player.mesh.position.y = 65;
     player.mesh.position.x -= 30;
-    // player.mesh.rotation.y -= 0.4;
     player.mesh.position.z = 60;
-    player.mesh.rotation.y = -0.9;
+    player.mesh.rotation.y = -0.3;
     scene.scene.add(player.mesh);
 
     return player;
