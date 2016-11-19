@@ -596,5 +596,5 @@ define(function() {
     },
     "cssFontWeight": "bold",
     "cssFontStyle": "normal"
-}
+  };
 });

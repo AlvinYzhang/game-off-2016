@@ -3,9 +3,10 @@ define([
   './modules/lights',
   './modules/player',
   './modules/platforms',
-  './modules/colors'
+  './modules/colors',
+  './modules/title'
 ], function(
-  sceneClass, lights, playerClass, platforms, Colors
+  sceneClass, lights, playerClass, platforms, Colors, title
 ) {
   // var player, startingPlatform;
 
@@ -38,13 +39,14 @@ define([
   var gameOver = function() {
     player.isJumping = player.isFalling = false;
     player.fallSpeed = player.jumpSpeed = 0;
-    TweenMax.to(player.mesh.scale, 2, {ease: "Strong.easeOut", z: 0.5, y: 0.5, x: 0.5});
+    TweenMax.to(player.mesh.scale, 2, {ease: "Strong.easeOut", z: 0.45, y: 0.45, x: 0.45});
     TweenMax.to(player.mesh.position, 2, {ease: "Strong.easeOut", z: 60, y: 65, x: -30});
     TweenMax.to(player.mesh.rotation, 2, {ease: "Strong.easeOut", y: 0});
     platforms.platforms.forEach(function(pl) {
       TweenMax.to(pl.position, 2, {ease: "Strong.easeOut", y: -300});
     });
     TweenMax.to(startingPlatform.position, 2, {ease: "Strong.easeOut", y: -300});
+    title.show();
   };
 
   var startGame = function() {
@@ -59,6 +61,8 @@ define([
       platforms.platforms.forEach(function(pl) {
         pl.action();
       });
+
+      title.hide();
     }, 2000);
   }
 
@@ -155,6 +159,7 @@ define([
     scoreDiv.innerText = score;
     document.body.appendChild(scoreDiv);
 
+    title.init();
     loop();
     startGame();
   }

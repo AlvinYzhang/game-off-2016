@@ -234,7 +234,7 @@ function(scene, Colors) {
   var createPlayer = function() {
     player = new Player();
     // player.mesh.rotation.y -= 0.19;
-    player.mesh.scale.set(.5,.5,.5);
+    player.mesh.scale.set(.45,.45,.45);
     player.mesh.position.y = 65;
     player.mesh.position.x -= 30;
     // player.mesh.rotation.y -= 0.4;
