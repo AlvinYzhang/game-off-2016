@@ -108,7 +108,6 @@ function(Colors, scene, font) {
     // scene.scene.add(platform.bbox);
     platforms.push(platform);
     scene.scene.add(platform);
-
     return platform;
   }
 
@@ -124,11 +123,14 @@ function(Colors, scene, font) {
 
   var resetPlatforms = function() {
     text = textCopy;
-    platforms.forEach(function(pl){
+    platforms.forEach(function(pl) {
       scene.scene.remove(pl);
     });
+
     startingPlatform.position.y = -200;
+    platforms = [];
     createAll();
+    return platforms;
   }
 
   return {

@@ -166,7 +166,7 @@ define([
     if (!GAME_RUNNING) {
       score = 0;
       scoreDiv.innerText = score;
-      platforms.resetPlatforms();
+      platforms.platforms = platforms.resetPlatforms();
       startGame();
     }
   }
