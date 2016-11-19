@@ -128,14 +128,14 @@ function(scene, Colors) {
     glasses5.position.x += 40;
 
     var matHair = new THREE.MeshPhongMaterial({color:Colors.hair, shading:THREE.FlatShading});
-    var geomHair = new THREE.CubeGeometry(70, 10, 60);
+    var geomHair = new THREE.CubeGeometry(70, 10, 50);
     var hair = new THREE.Mesh(geomHair, matHair);
     hair.castShadow = true;
     hair.receiveShadow = true;
     this.mesh.add(hair);
     hair.position.y += 100;
     hair.position.x -= 5;
-    hair.position.z += 10;
+    hair.position.z += 5;
 
     var geomHair2 = new THREE.CubeGeometry(70, 30, 30);
     var hair2 = new THREE.Mesh(geomHair2, matHair);
@@ -160,6 +160,38 @@ function(scene, Colors) {
     this.jumpSpeed = 0;
     this.fallSpeed = 0;
     this.maxJumpSpeed = 9;
+
+    var fringeGeometry = new THREE.CubeGeometry(10, 10, 10);
+    var fringeMesh = new THREE.Mesh(fringeGeometry, matHair);
+    fringeMesh.geometry.applyMatrix(new THREE.Matrix4().makeTranslation(0,5,0));
+
+    fringeMesh.position.y = 95;
+    fringeMesh.position.z = 35;
+    fringeMesh.position.x = 25;
+
+    this.fringe = new THREE.Object3D();
+
+    for (var i = 0; i < 7; i++) {
+      var fringeElement = fringeMesh.clone();
+      fringeElement.position.x -= 10 * i;
+      this.fringe.add(fringeElement);
+    }
+    this.mesh.add(this.fringe);
+
+    var fringeAngle = 0;
+    this.fringeUpdate = function() {
+      var elements = this.fringe.children;
+      elements.forEach(function(elem, index) {
+        elem.scale.y = 0.75 + Math.cos(fringeAngle + index/7) * 0.25;
+      });
+
+      fringeAngle += 0.16;
+    }
+
+    // this.resetFringe = function() {
+    //   var elements = this.fringe.children;
+    //
+    // };
 
     this.jump = function() {
       if (!this.isJumping && !this.isFalling) {
@@ -239,7 +271,7 @@ function(scene, Colors) {
     player.mesh.position.x -= 30;
     // player.mesh.rotation.y -= 0.4;
     player.mesh.position.z = 60;
-
+    player.mesh.rotation.y = -0.9;
     scene.scene.add(player.mesh);
 
     return player;

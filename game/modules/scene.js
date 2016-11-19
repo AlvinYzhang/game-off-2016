@@ -30,7 +30,7 @@ define(function() {
     camera.position.z = 130;
     camera.position.y = 100;
 
-    renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+    renderer = new THREE.WebGLRenderer({ alpha: true, antialias: false });
     renderer.setSize(WIDTH, HEIGHT);
     renderer.shadowMap.enabled = true;
 
