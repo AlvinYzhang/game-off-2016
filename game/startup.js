@@ -188,12 +188,6 @@ define([
       startGame();
     }
   }
-  document.onkeydown = function(e) {
-    if (e.keyCode === 39) {
-      player.moveRight();
-    } else if (e.keyCode === 37) {
-        player.moveLeft();
-    }
-  }
+
   init();
 });
