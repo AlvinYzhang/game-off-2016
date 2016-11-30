@@ -16,7 +16,7 @@ As every quine program, Codeplorer displays it's own source code as an output. I
 
 ## Why?
 I found a pixelart character in one of the `trash` folders in my `development` directory called `it-guy.png`. It was probably drawn by me a while ago for one of my games, or stolen from somewhere gods only know why (if you feel like I should give you credits for it, let me know). I thought it would be nice to give a second chance to this little fellow, so I rewritten him in voxels instead of pixels.
-![images/characters](images/characters)
+![images/characters.jpg](images/characters.jpg)
 
 I also always wanted to dig deeper into the [quines](http://www.madore.org/~david/computers/quine.html). Since I'm not motivated enough nowadays to work on any side projects, Github's Game Off was the first time in a while when I could focus on one. And here it is. Enjoy!
 
